@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:weather_application/view/homepage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_application/themes/theme.dart';
+import 'package:weather_application/view/homepage.dart';
+
+import 'controller/theme.provider.dart';
 
 void main() {
-  runApp(SplashScreen());
+  runApp(WeatherApp());
 }
 
-class SplashScreen extends StatelessWidget {
-  SplashScreen({Key? key}) : super(key: key);
+class WeatherApp extends StatelessWidget {
+  WeatherApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routeInformationProvider: _router.routeInformationProvider,
-      routeInformationParser: _router.routeInformationParser,
-      routerDelegate: _router.routerDelegate,
-      theme: ThemeData(),
+    return ChangeNotifierProvider(
+      create: (context) => ChangeTheme(),
+      child: Consumer<ChangeTheme>(builder: (context, value, _) {
+        return MaterialApp.router(
+            routeInformationProvider: _router.routeInformationProvider,
+            routeInformationParser: _router.routeInformationParser,
+            routerDelegate: _router.routerDelegate,
+            theme: value.getDark ? dark : light);
+      }),
     );
   }
 

@@ -1,7 +1,6 @@
-
 import 'package:flutter/material.dart';
-import 'package:weather_application/services/api_call.dart';
-import 'package:weather_application/services/helper.functions.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_application/controller/theme.provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,18 +10,48 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var weatherApi = WeatherApi();
-  var helperFunctions = HelperFunctions();
-
   @override
   void initState() {
-    weatherApi.getWeatherDetails();
-    helperFunctions.getTheCurrentLocation();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      appBar: const CustomAppBar(),
+      body: Column(
+        children: const [],
+      ),
+    );
   }
+}
+
+class CustomAppBar extends StatelessWidget implements PreferredSize {
+  const CustomAppBar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      centerTitle: true,
+      title: const Text('Weather'),
+      actions: [
+        Consumer<ChangeTheme>(builder: (context, toggleController, _) {
+          return IconButton(
+              onPressed: () {
+                toggleController.toggleTheme();
+              },
+              icon: !toggleController.getDark
+                  ? const Icon(Icons.dark_mode)
+                  : const Icon(Icons.light_mode));
+        }),
+      ],
+    );
+  }
+
+  @override
+  Widget get child => const SizedBox();
+  @override
+  Size get preferredSize => const Size.fromHeight(40);
 }
